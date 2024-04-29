@@ -2,22 +2,41 @@
 <html>
   <head>
     <title>Shop Warriors</title>
-    <link rel="stylesheet" href="styles.css">
   </head>
-  <div class="navbar">
   
-    <div class="search-bar">
-        <input type="text" placeholder="Search...">
-    </div>
-    <div id="login">
-        <a href="#">Login</a>
-    </div>
-    <a href="cart.html"><button>Cart</button></a>
+  <body>
+    <div class="navbar">
+  
+      <div class="search-bar">
+          <input type="text" placeholder="Search...">
+      </div>
+      
+      <div id="login">
+          <a href="#">Login</a>
+      </div>
+      
+      <a href="cart.html"><button>Cart</button></a>
  
-  </div>
+    </div>
+  
+    <div>
+      <h2>T-shirt</h2>
+      <p>Price: $40</p>
+      <button onclick="addItem('T-shirt', 40)">Add to Cart</button>
+      
+    </div>
+  
+
   
   <script>
-
+		function addItem(name, price){
+    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    //add item
+    cartItems.push({ name: name, price: price });
+    //store updated cart into local
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
   </script>
   
+  </body>
 </html>
