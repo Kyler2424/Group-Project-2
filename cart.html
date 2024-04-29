@@ -4,14 +4,29 @@
 
   <h1>Cart</h1>
   <ul id="cartItems"></ul>
+  <button id="emptyCart">
+  Empty Cart
+  </button>
   <script>
     var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     var cartList = document.getElementById('cartItems');
     cartItems.forEach(function(item){
       var li = document.createElement('li');
-      li.textContenet = item.name + ' - Price: $' + item.price;
+      li.textContent = item.name + ' - Price: $' + item.price;
       cartList.appendChild(li);
     });
+    
+    //EMPTY THE CART
+    var emptyCart = document.getElementById('emptyCart');
+    emptyCart.addEventListener('click', function() {
+    cartItems = [];
+    //empty storage
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    while(cartList.firstChild) {
+    cartList.removeChild(cartList.firstChild);
+    }
+    });
+    
   </script>
   
 </body>
