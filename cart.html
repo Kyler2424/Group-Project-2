@@ -1,4 +1,14 @@
 <DOCTYPE html>
 <html>
   <h1>Cart</h1>
+  <ul id="cartItems"></ul>
+  <script>
+    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    var cartList = document.getElementById('cartItems');
+    cartItems.forEach(function(item){
+      var li = document.createElement('li');
+      li.textContenet = item.name + ' - Price: $' + item.price;
+      cartList.appendChild(li);
+    });
+  </script>
 </html>
