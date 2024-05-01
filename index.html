@@ -33,8 +33,16 @@
       <p>Price: $40</p>
       <button onclick="addItem('Klay Thompson Hoodie', 40)">Add to Cart</button>
     </div>
-
-  
+    <div>
+      <h2>Andrew Wiggens Jersey</h2>
+      <p>Price: $100</p>
+      <button onclick="addItem('Andrew Wiggens Jersey', 100)">Add to Cart</button>
+    </div>
+    <div>
+      <h2>Warriors Keychain</h2>
+      <p>Price: $10</p>
+      <button onclick="addItem('Warriors Keychain', 10)">Add to Cart</button>
+    </div>
   <script>
 		function addItem(name, price){
     var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
