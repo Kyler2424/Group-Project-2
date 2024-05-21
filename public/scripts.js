@@ -14,13 +14,13 @@ $(document).ready(function() {
     $.post('/api/users/login', { username, password })
       .done(function(data) {
         // Show an alert if the login is successful
-        alert('Login successful!');
+        customAlert('Login successful!');
         // Hide the login form
         $('#login-form').hide();
       })
       .fail(function() {
         // Show an alert if the login fails
-        alert('Login failed. Please check your credentials.');
+        customAlert('Login failed. Please check your credentials.');
       });
   });
 
@@ -37,7 +37,7 @@ $(document).ready(function() {
             <h3>${jersey.name}</h3>
             <p>${jersey.description}</p>
             <p>$${jersey.price}</p>
-            <button onclick="addItem('${jersey.name}', ${jersey.price}, '${jersey.imageUrl}')">Add to Cart</button>
+            <button onclick="addItem('${jersey.name}', ${jersey.price}, '${jersey.imageUrl}', this)">Add to Cart</button>
           </div>
         `);
       });
@@ -46,44 +46,49 @@ $(document).ready(function() {
 
   // Load jerseys
   loadJerseys();
+
+  // Form submission handler for user registration
+  $('#register-form').submit(function(e) {
+    e.preventDefault();
+    const username = $('#register-username').val();
+    const password = $('#register-password').val();
+
+    $.ajax({
+      url: '/api/users/register',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ username, password }),
+      success: function(response) {
+        alert('User registered successfully. User ID: ' + response.id);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Failed to register user. Error: ' + textStatus + ' ' + errorThrown);
+      }
+    });
+  });
 });
 
 // Function to add an item to the cart
-function addItem(name, price, imageUrl) {
+function addItem(name, price, imageUrl, buttonElement) {
     var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     cartItems.push({ name: name, price: price, imageUrl: imageUrl });
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    displayCartItems();  // Update display after adding an item
 
     // Display an "Added to Cart" message
-    showMessage('Added to Cart');
+    showMessage('Added to Cart', buttonElement);
 }
 
 // Function to show messages
-function showMessage(message) {
-    // Create a message element
-    var messageElement = $('<div class="cart-message"></div>').text(message);
-
-    // Append the message to the body or a specific container
-    $('body').append(messageElement);
-
-    // Style the message (optional, you can also do this in CSS)
-    $('.cart-message').css({
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
+function showMessage(message, element) {
+    var originalText = $(element).text();
+    $(element).text(message).css({
         background: 'green',
-        color: 'white',
-        padding: '10px',
-        borderRadius: '5px',
-        zIndex: 1000
+        color: 'white'
     });
-
-    // Automatically remove the message after 2 seconds
     setTimeout(function() {
-        $('.cart-message').fadeOut('slow', function() {
-            $(this).remove();
-        });
-    }, 2000);
+        $(element).text(originalText).attr('style', '');
+    }, 1000); // Duration of message display in milliseconds
 }
 
 // Check if the current page is the cart page
@@ -97,6 +102,7 @@ if (window.location.pathname.endsWith('cart.html')) {
     var li = $('<li></li>');
     li.append(`<img src="${item.imageUrl}" alt="${item.name}" style="width:50px; height:auto;">`); // Display image
     li.append(`${item.name} - Price: $${item.price}`);
+    li.append(`<button onclick="deleteItem(${cartItems.indexOf(item)})">Delete</button>`);
     cartList.append(li);
   });
 
@@ -108,39 +114,40 @@ if (window.location.pathname.endsWith('cart.html')) {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     // Remove all child nodes from the cart list
     cartList.empty();
+    // Update the subtotal display
+    $('#subtotal').text('Subtotal: $0.00');
   });
 }
 
 // Function to display cart items and calculate the subtotal
 function displayCartItems() {
-    // Retrieve cart items from local storage or initialize an empty array if none exist
-    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    // Select the HTML element where cart items will be displayed
-    var cartList = $('#cartItems');
-    // Initialize subtotal to zero
-    var subtotal = 0;
+    if (window.location.pathname.endsWith('cart.html')) {
+        var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        var cartList = $('#cartItems');
+        var subtotal = 0;
 
-    // Clear any existing items in the cart list to avoid duplication
-    cartList.empty();
+        cartList.empty();
 
-    // Iterate over each item in the cart
-    cartItems.forEach(function(item) {
-        // Create a new list item element for each cart item
-        var li = $('<li></li>');
-        // Append an image element for the item's image
-        li.append(`<img src="${item.imageUrl}" alt="${item.name}" style="width:50px; height:auto;">`);
-        // Append a text node with the item's name and price
-        li.append(`${item.name} - Price: $${item.price}`);
-        // Add the list item to the cart list in the DOM
-        cartList.append(li);
+        cartItems.forEach(function(item) {
+            var li = $('<li></li>');
+            li.append(`<img src="${item.imageUrl}" alt="${item.name}" style="width:50px; height:auto;">`);
+            li.append(`${item.name} - Price: $${item.price}`);
+            li.append(`<button onclick="deleteItem(${cartItems.indexOf(item)})">Delete</button>`);
+            cartList.append(li);
 
-        // Add the item's price to the subtotal
-        subtotal += item.price;
-    });
+            subtotal += item.price;
+        });
 
-    // Display the calculated subtotal in the designated HTML element
-    // Assuming there is an element with the ID 'subtotal' to display the subtotal value
-    $('#subtotal').text(`Subtotal: $${subtotal.toFixed(2)}`);
+        $('#subtotal').text(`Subtotal: $${subtotal.toFixed(2)}`);
+    }
+}
+
+// Function to delete an item from the cart
+function deleteItem(index) {
+    var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    cartItems.splice(index, 1);
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    displayCartItems();  // Ensure this is called here
 }
 
 // Ensure this function is called when the document is ready, particularly when the cart page is loaded
@@ -151,3 +158,22 @@ $(document).ready(function() {
         displayCartItems();
     }
 });
+
+// Function to show custom alerts
+function customAlert(message) {
+    let alertBox = $('<div class="custom-alert"></div>').text(message);
+    $('body').append(alertBox);
+    alertBox.css({
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: 'rgba(0, 102, 182, 0.9)',
+        color: 'white',
+        padding: '15px',
+        borderRadius: '5px',
+        zIndex: 10000
+    });
+    setTimeout(function() {
+        alertBox.fadeOut('slow', function() { alertBox.remove(); });
+    }, 3000); // Duration of message display in milliseconds
+}

@@ -2,21 +2,30 @@
 <html>
 <head>
   <title>Cart</title>
+  <!-- Link to external CSS file -->
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
   <header>
     <nav>
+      <!-- Navigation links -->
       <a href="index.html">Home</a>
       <a href="cart.html">Cart</a>
     </nav>
   </header>
   <main>
+    <!-- Main heading for the cart page -->
     <h1>Cart</h1>
+    <!-- Unordered list to display cart items -->
     <ul id="cartItems"></ul>
+    <!-- Button to empty the cart -->
     <button id="emptyCart">Empty Cart</button>
   </main>
+  <!-- Display the subtotal amount -->
+  <div id="subtotal">Subtotal: $0.00</div>
+  <!-- Link to jQuery library -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Link to external JavaScript file -->
   <script src="scripts.js" defer></script>
 </body>
 </html>

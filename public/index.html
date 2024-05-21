@@ -1,29 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Page title -->
   <title>Shop Warriors</title>
+  <!-- Link to external CSS file -->
   <link rel="stylesheet" type="text/css" href="styles.css">
+  <!-- jQuery library -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <header>
     <nav>
+      <!-- Logo and home link -->
       <a href="#" id="logo">Warriors Jerseys</a>
+      <!-- Link to the cart page -->
       <a href="cart.html">Cart</a>
+      <!-- Link to trigger the login form display -->
       <a href="#" id="login">Login</a>
     </nav>
   </header>
   <main>
+    <!-- Hidden login form -->
     <div id="login-form" style="display: none;">
       <h2>Login</h2>
+      <!-- Username input -->
       <input type="text" id="username" placeholder="Username">
+      <!-- Password input -->
       <input type="password" id="password" placeholder="Password">
+      <!-- Login button -->
       <button id="login-button">Login</button>
     </div>
+    <!-- Container for dynamically loaded jerseys -->
     <div id="jerseys-container">
-      <!-- Jerseys will be dynamically loaded here -->
+      <!-- Placeholder comment for where jerseys will be loaded -->
+    </div>
+    <div id="register-form" style="display: none;">
+      <h2>Register</h2>
+      <form id="signup-form">
+        <input type="text" id="register-username" placeholder="Username" required>
+        <input type="password" id="register-password" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
     </div>
   </main>
+  <!-- Link to external JavaScript file -->
   <script src="scripts.js"></script>
 </body>
 </html>

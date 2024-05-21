@@ -20,12 +20,15 @@ router.post('/login', (req, res) => {
 
 // Route for user registration
 router.post('/register', (req, res) => {
-  // Extracting username and password from the request body
+  console.log(req.body);  // Log the request body to see what data is received
   const { username, password } = req.body;
   // Inserting a new user into the database with the provided username and password
   db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], function(err) {
-    // If an error occurs, send a 500 status with the error message
-    if (err) return res.status(500).send(err);
+    // If an error occurs, log the error and send a 500 status with the error message
+    if (err) {
+      console.error("Error registering user:", err);
+      return res.status(500).send("Error registering user: " + err.message);
+    }
     // If the user is successfully registered, send the user ID
     res.send({ id: this.lastID });
   });
@@ -33,3 +36,4 @@ router.post('/register', (req, res) => {
 
 // Exporting the router to be used in other modules
 module.exports = router;
+
