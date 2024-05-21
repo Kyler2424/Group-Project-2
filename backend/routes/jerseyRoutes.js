@@ -4,7 +4,7 @@ const router = express.Router();
 const db = require('../db');
 
 // Route to get all jerseys from the database
-router.get('/jerseys', (req, res) => {
+router.get('/', (req, res) => {
   // Query the database to get all jerseys
   db.all('SELECT * FROM jerseys', (err, jerseys) => {
     // If there is an error, send a 500 status with the error message

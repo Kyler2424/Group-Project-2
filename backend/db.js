@@ -10,7 +10,11 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
     password TEXT NOT NULL
-  )`);
+  )`, (err) => {
+    if (err) {
+      console.error("Error creating users table:", err);
+    }
+  });
 
   // Create the 'jerseys' table with columns for id, name, description, price, and imageUrl
   db.run(`CREATE TABLE jerseys (
@@ -19,7 +23,11 @@ db.serialize(() => {
     description TEXT NOT NULL,
     price REAL NOT NULL,
     imageUrl TEXT NOT NULL
-  )`);
+  )`, (err) => {
+    if (err) {
+      console.error("Error creating jerseys table:", err);
+    }
+  });
 
   // Insert sample jersey data into the 'jerseys' table
   const jerseys = [
@@ -38,7 +46,11 @@ db.serialize(() => {
   // Iterate over the jerseys array and insert each jersey into the 'jerseys' table
   jerseys.forEach(jersey => {
     db.run(`INSERT INTO jerseys (name, description, price, imageUrl) VALUES (?, ?, ?, ?)`,
-      [jersey.name, jersey.description, jersey.price, jersey.imageUrl]);
+      [jersey.name, jersey.description, jersey.price, jersey.imageUrl], (err) => {
+        if (err) {
+          console.error("Error inserting jersey:", err);
+        }
+    });
   });
 });
 
