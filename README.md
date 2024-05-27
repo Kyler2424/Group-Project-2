@@ -1,1 +1,3 @@
 Group-Project-2
+
+### In this repo, we made an online store based on the Golden State Warriors basketball team. The website contains a sticky navbar and all the items are listed in a flexbox layout. There exists a login page in which you can enter a username and password followed by a login button. There is also a cart that uses a database (back end and front end) to store the products that the user decides to put into the cart. In the cart page users can delete single items or empty the entire cart using buttons. The total price of the cart is calculated and displayed on the bottom of the cart page.
